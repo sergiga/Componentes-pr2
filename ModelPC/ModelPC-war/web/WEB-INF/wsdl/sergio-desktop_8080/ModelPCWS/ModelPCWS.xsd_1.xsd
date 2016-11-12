@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.3.1-b419 (branches/2.3.1.x-7937; 2014-08-04T08:11:03+0000) JAXWS-RI/2.2.10-b140803.1500 JAXWS-API/2.2.11 JAXB-RI/2.2.10-b140802.1033 JAXB-API/2.2.12-b140109.1041 svn-revision#unknown. --><xs:schema xmlns:tns="http://webservice/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://webservice/">
+
+<xs:element name="addConfiguracion" type="tns:addConfiguracion"/>
+
+<xs:element name="configuracionpc" type="tns:configuracionpc"/>
+
+<xs:element name="cpu" type="tns:cpu"/>
+
+<xs:element name="getCatalogo" type="tns:getCatalogo"/>
+
+<xs:element name="getCatalogoResponse" type="tns:getCatalogoResponse"/>
+
+<xs:element name="getConfiguracion" type="tns:getConfiguracion"/>
+
+<xs:element name="getConfiguracionResponse" type="tns:getConfiguracionResponse"/>
+
+<xs:complexType name="addConfiguracion">
+<xs:sequence>
+<xs:element name="velCPU" type="xs:double"/>
+<xs:element name="capRAM" type="xs:int"/>
+<xs:element name="capDD" type="xs:int"/>
+<xs:element name="velTarGraf" type="xs:double"/>
+<xs:element name="memTarGraf" type="xs:int"/>
+<xs:element name="idTipoCPU" type="xs:short"/>
+<xs:element name="idsDescrComp" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getCatalogo">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="getCatalogoResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:configuracionpc" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="configuracionpc">
+<xs:sequence>
+<xs:element name="capacidaddd" type="xs:int"/>
+<xs:element name="capacidadram" type="xs:int"/>
+<xs:element name="idconfiguracion" type="xs:int" minOccurs="0"/>
+<xs:element name="memoriatarjetagrafica" type="xs:int" minOccurs="0"/>
+<xs:element name="tipocpu" type="tns:cpu" minOccurs="0"/>
+<xs:element name="velocidadcpu" type="xs:double"/>
+<xs:element name="velocidadtarjetagrafica" type="xs:double"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="cpu">
+<xs:sequence>
+<xs:element name="idtipocpu" type="xs:short" minOccurs="0"/>
+<xs:element name="nombretipocpu" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getConfiguracion">
+<xs:sequence>
+<xs:element name="idConfiguracion" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="getConfiguracionResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:configuracionpc" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

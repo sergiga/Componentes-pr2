@@ -7,6 +7,8 @@ package presentacion;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,12 +21,14 @@ import webservice.ModelPCWS_Service;
  *
  * @author sergio
  */
-@WebServlet(name = "CatalogoServlet", urlPatterns = {"/CatalogoServlet"})
-public class CatalogoServlet extends HttpServlet {
+@WebServlet(name = "EmpleadoServlet", urlPatterns = {"/empleado"})
+public class EmpleadoServlet extends HttpServlet {
 
     @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/sergio-desktop_8080/ModelPCWS/ModelPCWS.wsdl")
     private ModelPCWS_Service service;
 
+    private String url;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -37,17 +41,49 @@ public class CatalogoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CatalogoServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CatalogoServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        
+        try {
+            String accion = request.getParameter("accion");
+            /* No es un formulario */
+            if(accion != null) {
+                switch(accion) {
+                    case "Add configuracion":
+                        ArrayList<Integer> idsDescrComp = new ArrayList<>();
+                        double velCPU = Double.parseDouble(request.getParameter("velCPU"));
+                        int capRAM = Integer.parseInt(request.getParameter("capRAM"));
+                        int capDD = Integer.parseInt(request.getParameter("capDD"));
+                        double velTarGraf = Double.parseDouble(request.getParameter("velTarGraf"));
+                        int memTarGraf = Integer.parseInt(request.getParameter("memTarGraf"));
+                        short idTipoCPU = Short.parseShort(request.getParameter("idTipoCPU"));
+                        idsDescrComp.add(Integer.parseInt(request.getParameter("grafica")));
+                        idsDescrComp.add(Integer.parseInt(request.getParameter("discoDuro")));
+                        idsDescrComp.add(Integer.parseInt(request.getParameter("procesador")));
+                        idsDescrComp.add(Integer.parseInt(request.getParameter("caja")));
+                        idsDescrComp.add(Integer.parseInt(request.getParameter("chipset")));
+                        idsDescrComp.add(Integer.parseInt(request.getParameter("ram")));
+                        
+                        addConfiguracion(velCPU, capRAM, capDD, velTarGraf, memTarGraf, idTipoCPU, idsDescrComp);
+                        this.url = "/configuracion.jsp";
+                        break;
+                    case "Volver empleado":
+                        this.url = "/empleado.jsp";
+                        break;
+                    default:
+                        this.url = "/index.jsp";
+                        break;
+                }
+            }
+            else {
+                this.url = "/index.jsp";
+            }
+        }
+        catch (Exception e) {
+            request.setAttribute("type", e.toString());
+            this.url = "/error.jsp";
+        }
+        finally {
+            RequestDispatcher respuesta = getServletContext().getRequestDispatcher(this.url);
+            respuesta.forward(request, response);
         }
     }
 
@@ -90,11 +126,11 @@ public class CatalogoServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private java.util.List<webservice.Configuracionpc> getCatalogo() {
+    private void addConfiguracion(double velCPU, int capRAM, int capDD, double velTarGraf, int memTarGraf, short idTipoCPU, java.util.List<java.lang.Integer> idsDescrComp) {
         // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
         // If the calling of port operations may lead to race condition some synchronization is required.
         webservice.ModelPCWS port = service.getModelPCWSPort();
-        return port.getCatalogo();
+        port.addConfiguracion(velCPU, capRAM, capDD, velTarGraf, memTarGraf, idTipoCPU, idsDescrComp);
     }
 
 }

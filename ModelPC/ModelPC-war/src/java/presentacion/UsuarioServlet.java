@@ -5,21 +5,38 @@
  */
 package presentacion;
 
+import despliegue.UsuarioManagerRemote;
+import dominio.Descripcioncomponente;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.ws.WebServiceRef;
+import webservice.Configuracionpc;
+import webservice.ModelPCWS_Service;
 
 /**
  *
  * @author sergio
  */
-@WebServlet(name = "UsuarioServlet", urlPatterns = {"/UsuarioServlet"})
+@WebServlet(name = "UsuarioServlet", urlPatterns = {"/login"})
 public class UsuarioServlet extends HttpServlet {
 
+    @WebServiceRef(wsdlLocation = "WEB-INF/wsdl/sergio-desktop_8080/ModelPCWS/ModelPCWS.wsdl")
+    private ModelPCWS_Service service;
+
+    @EJB
+    private UsuarioManagerRemote usuarioManager;
+
+    private String url;
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,17 +49,53 @@ public class UsuarioServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UsuarioServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UsuarioServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        
+        String nifcif;
+        String passwd;
+        
+        try {
+            String accion = request.getParameter("accion");
+            /* No es un formulario */
+            if(accion != null) {
+                switch(accion) {
+                    case "Login":
+                        nifcif = request.getParameter("nifcif");
+                        passwd = request.getParameter("passwd");
+                        if(usuarioManager.isUser(nifcif, passwd)) {
+                            ArrayList<Configuracionpc> catalogo = new ArrayList<>(getCatalogo());
+                            if(usuarioManager.tipoUser(nifcif).getTipo().equals("Empresa")) {
+                                request.setAttribute("catalogo", catalogo);
+                                this.url = "/empresa.jsp";
+                            }
+                            else {
+                                Set<Integer> idsDescrp = new HashSet<Integer>();
+                                for(Configuracionpc c : catalogo) {
+                                    idsDescrp.add(c.getIdconfiguracion());
+                                }
+                                request.setAttribute("descripciones", idsDescrp);
+                                this.url = "/empleado.jsp";
+                            }
+                        }
+                        else {
+                            this.url = "/index.jsp";
+                        }
+                        break;
+                    default:
+                        this.url = "/index.jsp";
+                        break;
+                }
+            }
+            else {
+                this.url = "/index.jsp";
+            }
+        }
+        catch (Exception e) {
+            request.setAttribute("type", e.toString());
+            this.url = "/error.jsp";
+        }
+        finally {
+            RequestDispatcher respuesta = getServletContext().getRequestDispatcher(this.url);
+            respuesta.forward(request, response);
         }
     }
 
@@ -84,5 +137,12 @@ public class UsuarioServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private java.util.List<webservice.Configuracionpc> getCatalogo() {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        webservice.ModelPCWS port = service.getModelPCWSPort();
+        return port.getCatalogo();
+    }
 
 }
