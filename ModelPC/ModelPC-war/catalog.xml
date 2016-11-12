@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
+    <system systemId="http://sergio-desktop:8080/ModelPCWS/ModelPCWS?wsdl" uri="src/conf/xml-resources/web-service-references/ModelPCWS/wsdl/sergio-desktop_8080/ModelPCWS/ModelPCWS.wsdl"/>
+    <system systemId="http://sergio-desktop:8080/ModelPCWS/ModelPCWS?xsd=1" uri="src/conf/xml-resources/web-service-references/ModelPCWS/wsdl/sergio-desktop_8080/ModelPCWS/ModelPCWS.xsd_1.xsd"/>
+</catalog>
