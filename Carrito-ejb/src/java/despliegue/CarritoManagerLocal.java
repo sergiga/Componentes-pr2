@@ -5,6 +5,8 @@
  */
 package despliegue;
 
+import dominio.Configuracionpc;
+import java.util.Map;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +15,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface CarritoManagerLocal {
-    
+    public void addPedido(Configuracionpc configuracion, int cantidad);
+    public void removePedido(Configuracionpc configuracion);
+    public Map<Configuracionpc, Integer> getItems();
 }

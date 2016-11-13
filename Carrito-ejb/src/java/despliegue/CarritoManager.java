@@ -5,6 +5,11 @@
  */
 package despliegue;
 
+import dominio.Configuracionpc;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.PostConstruct;
+import javax.ejb.Remove;
 import javax.ejb.Stateful;
 
 /**
@@ -14,6 +19,34 @@ import javax.ejb.Stateful;
 @Stateful
 public class CarritoManager implements CarritoManagerLocal {
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    private String userId;
+    private Map<Configuracionpc, Integer> listaCompra;
+    
+    @PostConstruct
+    private void create(){
+        listaCompra = new HashMap<>();
+    }
+
+    @Override
+    public void addPedido(Configuracionpc configuracion, int cantidad) {
+        if(listaCompra.containsKey(configuracion)) {
+            int cantidadOld = listaCompra.get(configuracion);
+            listaCompra.put(configuracion, cantidad + cantidadOld);
+        }
+    }
+
+    @Override
+    public void removePedido(Configuracionpc configuracion) {
+        listaCompra.remove(configuracion);
+    }
+
+    @Override
+    public Map<Configuracionpc, Integer> getItems() {
+        return listaCompra;
+    }
+    
+    @Remove
+    public void remove() {
+        listaCompra = null;
+    }
 }
