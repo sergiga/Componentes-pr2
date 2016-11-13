@@ -28,18 +28,6 @@ public interface ModelPCWS {
 
     /**
      * 
-     * @return
-     *     returns java.util.List<webservice.Configuracionpc>
-     */
-    @WebMethod
-    @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "getCatalogo", targetNamespace = "http://webservice/", className = "webservice.GetCatalogo")
-    @ResponseWrapper(localName = "getCatalogoResponse", targetNamespace = "http://webservice/", className = "webservice.GetCatalogoResponse")
-    @Action(input = "http://webservice/ModelPCWS/getCatalogoRequest", output = "http://webservice/ModelPCWS/getCatalogoResponse")
-    public List<Configuracionpc> getCatalogo();
-
-    /**
-     * 
      * @param capDD
      * @param idTipoCPU
      * @param velCPU
@@ -82,5 +70,17 @@ public interface ModelPCWS {
     public Configuracionpc getConfiguracion(
         @WebParam(name = "idConfiguracion", targetNamespace = "")
         int idConfiguracion);
+
+    /**
+     * 
+     * @return
+     *     returns java.util.List<webservice.Configuracionpc>
+     */
+    @WebMethod
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "getCatalogo", targetNamespace = "http://webservice/", className = "webservice.GetCatalogo")
+    @ResponseWrapper(localName = "getCatalogoResponse", targetNamespace = "http://webservice/", className = "webservice.GetCatalogoResponse")
+    @Action(input = "http://webservice/ModelPCWS/getCatalogoRequest", output = "http://webservice/ModelPCWS/getCatalogoResponse")
+    public List<Configuracionpc> getCatalogo();
 
 }

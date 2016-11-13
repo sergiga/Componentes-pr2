@@ -26,13 +26,15 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="getCatalogo">
-<xs:sequence/>
+<xs:complexType name="getConfiguracion">
+<xs:sequence>
+<xs:element name="idConfiguracion" type="xs:int"/>
+</xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="getCatalogoResponse">
+<xs:complexType name="getConfiguracionResponse">
 <xs:sequence>
-<xs:element name="return" type="tns:configuracionpc" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="return" type="tns:configuracionpc" minOccurs="0"/>
 </xs:sequence>
 </xs:complexType>
 
@@ -55,15 +57,13 @@
 </xs:sequence>
 </xs:complexType>
 
-<xs:complexType name="getConfiguracion">
-<xs:sequence>
-<xs:element name="idConfiguracion" type="xs:int"/>
-</xs:sequence>
+<xs:complexType name="getCatalogo">
+<xs:sequence/>
 </xs:complexType>
 
-<xs:complexType name="getConfiguracionResponse">
+<xs:complexType name="getCatalogoResponse">
 <xs:sequence>
-<xs:element name="return" type="tns:configuracionpc" minOccurs="0"/>
+<xs:element name="return" type="tns:configuracionpc" minOccurs="0" maxOccurs="unbounded"/>
 </xs:sequence>
 </xs:complexType>
 </xs:schema>

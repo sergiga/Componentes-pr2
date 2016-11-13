@@ -5,7 +5,6 @@
  */
 package despliegue;
 
-import dominio.Configuracionpc;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
@@ -17,10 +16,10 @@ import javax.ejb.Stateful;
  * @author sergio
  */
 @Stateful
-public class CarritoManager implements CarritoManagerLocal {
+public class CarritoManager implements CarritoManagerRemote {
 
     private String userId;
-    private Map<Configuracionpc, Integer> listaCompra;
+    private Map<Integer, Integer> listaCompra;
     
     @PostConstruct
     private void create(){
@@ -28,20 +27,36 @@ public class CarritoManager implements CarritoManagerLocal {
     }
 
     @Override
-    public void addPedido(Configuracionpc configuracion, int cantidad) {
+    public void addUser(String user) {
+        userId = user;
+    }
+    
+    @Override
+    public void addPedido(int configuracion, int cantidad) {
+        int cantidadTotal = cantidad;
         if(listaCompra.containsKey(configuracion)) {
-            int cantidadOld = listaCompra.get(configuracion);
-            listaCompra.put(configuracion, cantidad + cantidadOld);
+            cantidadTotal += listaCompra.get(configuracion);
         }
+        listaCompra.put(configuracion, cantidadTotal);
     }
 
     @Override
-    public void removePedido(Configuracionpc configuracion) {
+    public void removePedido(int configuracion) {
         listaCompra.remove(configuracion);
     }
 
     @Override
-    public Map<Configuracionpc, Integer> getItems() {
+    public void removeAll() {
+        listaCompra.clear();
+    }
+    
+    @Override
+    public String getUser() {
+        return userId;
+    }
+    
+    @Override
+    public Map<Integer, Integer> getItems() {
         return listaCompra;
     }
     
