@@ -4,12 +4,6 @@
 <xsd:import namespace="http://webservice/" schemaLocation="http://sergio-desktop:8080/ModelPCWS/ModelPCWS?xsd=1"/>
 </xsd:schema>
 </types>
-<message name="getCatalogo">
-<part name="parameters" element="tns:getCatalogo"/>
-</message>
-<message name="getCatalogoResponse">
-<part name="parameters" element="tns:getCatalogoResponse"/>
-</message>
 <message name="addConfiguracion">
 <part name="parameters" element="tns:addConfiguracion"/>
 </message>
@@ -19,11 +13,13 @@
 <message name="getConfiguracionResponse">
 <part name="parameters" element="tns:getConfiguracionResponse"/>
 </message>
+<message name="getCatalogo">
+<part name="parameters" element="tns:getCatalogo"/>
+</message>
+<message name="getCatalogoResponse">
+<part name="parameters" element="tns:getCatalogoResponse"/>
+</message>
 <portType name="ModelPCWS">
-<operation name="getCatalogo">
-<input wsam:Action="http://webservice/ModelPCWS/getCatalogoRequest" message="tns:getCatalogo"/>
-<output wsam:Action="http://webservice/ModelPCWS/getCatalogoResponse" message="tns:getCatalogoResponse"/>
-</operation>
 <operation name="addConfiguracion">
 <input wsam:Action="http://webservice/ModelPCWS/addConfiguracion" message="tns:addConfiguracion"/>
 </operation>
@@ -31,10 +27,20 @@
 <input wsam:Action="http://webservice/ModelPCWS/getConfiguracionRequest" message="tns:getConfiguracion"/>
 <output wsam:Action="http://webservice/ModelPCWS/getConfiguracionResponse" message="tns:getConfiguracionResponse"/>
 </operation>
+<operation name="getCatalogo">
+<input wsam:Action="http://webservice/ModelPCWS/getCatalogoRequest" message="tns:getCatalogo"/>
+<output wsam:Action="http://webservice/ModelPCWS/getCatalogoResponse" message="tns:getCatalogoResponse"/>
+</operation>
 </portType>
 <binding name="ModelPCWSPortBinding" type="tns:ModelPCWS">
 <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-<operation name="getCatalogo">
+<operation name="addConfiguracion">
+<soap:operation soapAction=""/>
+<input>
+<soap:body use="literal"/>
+</input>
+</operation>
+<operation name="getConfiguracion">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>
@@ -43,13 +49,7 @@
 <soap:body use="literal"/>
 </output>
 </operation>
-<operation name="addConfiguracion">
-<soap:operation soapAction=""/>
-<input>
-<soap:body use="literal"/>
-</input>
-</operation>
-<operation name="getConfiguracion">
+<operation name="getCatalogo">
 <soap:operation soapAction=""/>
 <input>
 <soap:body use="literal"/>

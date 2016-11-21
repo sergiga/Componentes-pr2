@@ -75,6 +75,7 @@ public class UsuarioServlet extends HttpServlet {
                                 request.setAttribute("descripciones", idsDescrp);
                                 this.url = "/empleado.jsp";
                             }
+                            request.getSession().setAttribute("user", nifcif);
                         }
                         else {
                             this.url = "/index.jsp";
